@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "713801481574",
+    "project_id": "informasi-shelter",
+    "storage_bucket": "informasi-shelter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713801481574:android:71926096ac349246b55ca7",
+        "android_client_info": {
+          "package_name": "com.example.coba_setel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNq3TGVrPPD2iSZmoTGCtBBr_S_rhTKrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713801481574:android:5f1fbeac873dd8d7b55ca7",
+        "android_client_info": {
+          "package_name": "com.example.informasi_shelter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNq3TGVrPPD2iSZmoTGCtBBr_S_rhTKrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
