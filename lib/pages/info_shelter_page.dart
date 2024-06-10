@@ -1,8 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class InfoShelterPage extends StatelessWidget {
+class InfoShelterPage extends StatefulWidget {
   const InfoShelterPage({Key? key});
+
+  @override
+  State<InfoShelterPage> createState() => _InfoShelterPageState();
+}
+
+class _InfoShelterPageState extends State<InfoShelterPage> {
+  List<QueryDocumentSnapshot> sepedaList = [];
+  List<QueryDocumentSnapshot> sekuterList = [];
+  Map<String, List<QueryDocumentSnapshot>> shelterSepedaMap = {};
+  Map<String, List<QueryDocumentSnapshot>> shelterSekuterMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchKendaraan();
+  }
+
+  void fetchKendaraan() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('kendaraan').get();
+    setState(() {
+      sepedaList = snapshot.docs
+          .where((doc) => doc['jenisKendaraan'] == 'Sepeda')
+          .toList();
+      sekuterList = snapshot.docs
+          .where((doc) => doc['jenisKendaraan'] == 'Sekuter')
+          .toList();
+
+      for (var sepeda in sepedaList) {
+        final shelterId = sepeda['shelter_id'];
+        if (!shelterSepedaMap.containsKey(shelterId)) {
+          shelterSepedaMap[shelterId] = [];
+        }
+        shelterSepedaMap[shelterId]!.add(sepeda);
+      }
+
+      for (var sekuter in sekuterList) {
+        final shelterId = sekuter['shelter_id'];
+        if (!shelterSekuterMap.containsKey(shelterId)) {
+          shelterSekuterMap[shelterId] = [];
+        }
+        shelterSekuterMap[shelterId]!.add(sekuter);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +89,17 @@ class InfoShelterPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final Map<String, dynamic> data =
                     documents[index].data() as Map<String, dynamic>;
+                final shelterId = documents[index].id;
+                final sepedaCount =
+                    shelterSepedaMap[shelterId]?.length.toString() ?? '0';
+                final sekuterCount =
+                    shelterSekuterMap[shelterId]?.length.toString() ?? '0';
+
                 return ItemWidget(
-                  shelter: data['shelter'],
-                  image: data['image'],
-                  bike: data['bike'],
-                  scooter: data['scooter'],
-                );
+                    shelter: data['shelter'],
+                    image: data['image'],
+                    bike: sepedaCount,
+                    scooter: sekuterCount);
               },
             );
           },
@@ -202,7 +252,7 @@ class ItemWidget extends StatelessWidget {
                   initialValue: selectedShelter,
                   readOnly: true,
                   decoration: const InputDecoration(
-                  labelText: 'Shelter Awal',
+                    labelText: 'Shelter Awal',
                     labelStyle:
                         TextStyle(color: Color.fromARGB(255, 163, 41, 41)),
                   ),
@@ -221,8 +271,7 @@ class ItemWidget extends StatelessWidget {
                       return const Text('Error fetching data');
                     }
 
-                    if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     }
 
@@ -235,21 +284,17 @@ class ItemWidget extends StatelessWidget {
                       isDense: true,
                       items: documents.map((DocumentSnapshot document) {
                         return DropdownMenuItem<String>(
-                          value: document['shelter'] as String,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(document['shelter'] as String),
-                          ),
+                          value: document['shelter'] as String?,
+                          child: Text(document['shelter'] as String? ?? ''),
                         );
                       }).toList(),
-                      onChanged: (newValue) {
-                        // logic when shelter is changed
-                        selectedShelter = newValue ?? selectedShelter;
+                      onChanged: (String? newValue) {
+                        selectedShelter = newValue ?? '';
                       },
                       decoration: const InputDecoration(
-                        labelText: 'Shelter Akhir',
-                        labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 163, 41, 41)),
+                        labelText: 'Shelter Tujuan',
+                        labelStyle:
+                            TextStyle(color: Color.fromARGB(255, 163, 41, 41)),
                       ),
                     );
                   },

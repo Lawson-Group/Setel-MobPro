@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:setel_me/pages/history_page.dart';
+import 'package:coba_setel/pages/history_page.dart';
 
 class TripDetailPage extends StatelessWidget {
   final Trip trips;
