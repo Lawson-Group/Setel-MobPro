@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coba_setel/services/auth_login.dart';
-import 'package:coba_setel/pages/login_page.dart';
 import 'package:coba_setel/pages/trip_detail_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -87,7 +85,7 @@ class _TripHistoryPageState extends State<TripHistoryPage> {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('trips')
           .orderBy('date')
-          .limit(12)
+          .limit(15)
           .get();
 
       List<Trip> newTrips = snapshot.docs.map((doc) => Trip.fromFirestore(doc)).toList();
@@ -102,28 +100,12 @@ class _TripHistoryPageState extends State<TripHistoryPage> {
     }
   }
 
-  Future<void> signOut() async {
-    await Auth().signOut();
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trip History', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red.shade900,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: signOut,
-          ),
-        ],
       ),
       body: ListView.builder(
         controller: _scrollController,

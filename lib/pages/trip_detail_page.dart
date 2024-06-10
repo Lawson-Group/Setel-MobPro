@@ -9,7 +9,7 @@ class TripDetailPage extends StatelessWidget {
 
   Future<Receipt?> fetchReceipt(String tripId) async {
     DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('receipts')
+        .collection('receipt')
         .doc(tripId)
         .get();
 
@@ -41,17 +41,29 @@ class TripDetailPage extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     trips.title,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 24, 
+                      fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text(trips.date, style: const TextStyle(fontSize: 16)),
+                  Text(
+                    trips.date,
+                    style: const TextStyle(
+                      fontSize: 16, 
+                      color: Colors.grey),
+                  ),
                   const SizedBox(height: 16),
-                  Text(trips.description, style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 24),
+                  Text(
+                    trips.description, 
+                    style: const TextStyle(
+                      fontSize: 16),
+                      textAlign: TextAlign.center, 
+                  ),
+                  const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 8),
                   const Text(
@@ -59,9 +71,49 @@ class TripDetailPage extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Shelter Awal: ${receipt.shelterAwal}'),
-                  Text('Shelter Akhir: ${receipt.shelterAkhir}'),
-                  Text('Durasi: ${receipt.duration} menit'),
+                  Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              const Icon(Icons.directions_bus, color: Colors.red),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Shelter Awal: ${receipt.shelterAwal}',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(Icons.directions_bus, color: Colors.black),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Shelter Akhir: ${receipt.shelterAkhir}',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Icon(Icons.timer, color: Colors.grey.shade500),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Durasi: ${receipt.duration} menit',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
